@@ -1,0 +1,32 @@
+#! /usr/bin/env python
+# ------------------------------------------------------------
+#
+# Matthieu Defrance - ULB 2016
+# annotate-peaks
+#
+# annotate MACS2 peaks
+# annotate-peaks -h for usage
+#
+# ------------------------------------------------------------
+
+from lib.ngs import *
+
+# ------------------------------------------------------------
+# Run
+# ------------------------------------------------------------
+def main(input_peaks, output_peaks, annotatation_file, promo='None', nearTTS='None'):
+    '''
+    Annotate the MACS peaks using the annotation file.
+    Annotation file should be provided in UCSC refFlat format. /!\ Caution the FIRST column should be geneName and the TWO LAST columns should be exonStarts and exonEnds.
+    Only peaks in MACS2 xls format can be annotated.
+    Please give promoter borders in bp as comma-separated format (ex: 2000,1000 for -2kb to +1kb around TSS) as promo argument to take promoter into account (e.g. ChIP analysis)
+    '''
+    if promo == None: #Probably because of commandify, when promo is not set, its value is None and when it is set, its value is a string...
+        promo = 'None'		
+    if nearTTS == None: #Probably because of commandify, when promo is not set, its value is None and when it is set, its value is a string...
+        nearTTS = 'None'
+    RNA_peaks_annotate(input_peaks, output_peaks, annotatation_file, promo, nearTTS)
+
+if __name__ == '__main__':
+    from lib.commandify import *
+    commandify(main, True)

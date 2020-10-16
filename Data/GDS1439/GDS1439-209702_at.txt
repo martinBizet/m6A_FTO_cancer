@@ -1,0 +1,19 @@
+GSM74875	Benign Prostate tissue N1	2177.87	93
+GSM74876	Benign prostate tissue N2	1907.67	92
+GSM74877	Benign prostate tissue N3	2344.72	93
+GSM74878	Benign prostate tissue N4	1761.99	91
+GSM74879	Benign prostate tissue NX1	1874.16	91
+GSM74880	Benign prostate tissue NX2	2023.88	92
+GSM74881	Clinically localized primary prostate cancer P1	1397.59	88
+GSM74882	Clinically localized primary prostate cancer P2	1915.24	92
+GSM74883	Clinically localized primary prostate cancer P3	1707.62	91
+GSM74884	Clinically localized primary prostate cancer P4	1699.19	91
+GSM74885	Clinically localized primary prostate cancer P5	1877.7	91
+GSM74886	Clinically localized primary prostate cancer tissue pool PX1	1767.66	91
+GSM74887	Clinically localized primary prostate cancer tissue pool PX2	1656.11	90
+GSM74888	Metastatic prostate cancer W1	1299.25	88
+GSM74889	Metastatic prostate cancer W2	1907.41	92
+GSM74890	Metastatic prostate cancer W3	1357.67	88
+GSM74891	Metastatic prostate cancer W4	1470.31	89
+GSM74892	Metastatic prostate cancer tissue pool WX1	1786.63	91
+GSM74893	Metastatic prostate cancer tissue pool WX2	1389.19	89
