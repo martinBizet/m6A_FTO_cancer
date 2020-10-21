@@ -8,6 +8,7 @@ The scripts run without any installation as long as the required dependencies an
 **0) prepare input files and set-up the tool**
 
 0.1) Get bam files and bedgraphs for IP and INPUT using classifical preprocessing tools (see Jeschke at al, 2020). Examples are in "Data/RNAi/".
+
 0.2) Add the path to your local copy of this git folder in the bash variable "THESE_TOOLS" (Add the following line in your.bashrc for a permanent usage or run on your terminal before any usage of the m6A-seq analyses tools) 
 ```
 export THESE_TOOLS=<path to your local git folder>
