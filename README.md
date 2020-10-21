@@ -79,7 +79,10 @@ Dependencies:
 2.2) Run "Diff_1vs1_RIPfromBdg.R"
 
 Description:
-Compute the actual differential using overlap peaks list and bedgraphs. Note that three options are possible, we strongly recommend to use option 2 (used in Jeschke et al, 2020). 
+Compute the actual differential using overlap peaks list and bedgraphs. Note that three options are possible, we strongly recommend to use option 2 (used in Jeschke et al, 2020).
+Expected output:
+"AlternOption2.txt" file, a text file computing Log-odd-Ratio (LOR) differential value between case and control for each peaks and "annot.txt" file showing annotation of the differenial peaks.
+
 
 Typical usage (Expected runtime: few hours):
 ```
