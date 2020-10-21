@@ -10,7 +10,7 @@
 ##    Default parameters
 # ========================
 
-source ${COCKTAIL}/"dependencies.sh"
+source ${THESE_TOOLS}/"dependencies.sh"
 
 RunIUPAC=0
 Tool="meme-chip"

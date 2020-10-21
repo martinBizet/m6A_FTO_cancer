@@ -140,7 +140,7 @@ if(print.help) {
 	##	FUNCTIONS  --
 	#----------------
 
-	source('/AnnotationAnalysis/mtools/lib.R'))
+	source(file.path(Sys.getenv("THESE_TOOLS"),'AnnotationAnalysis/mtools/lib.R'))
 
 	count <- function(peaks, bdg){
 		tmp1 <- pipe(paste("bedtools intersect -wb -a", bdg, "-b", peaks))

@@ -317,7 +317,7 @@ if(print.help) {
 		expect <- read.table(expect, sep='\t', header=TRUE, row.names=NULL, check.names=FALSE, as.is=TRUE, quote='', comment.char='')
 		rownames(expect) <- expect$name
 		expect.splitted <- strsplit(expect$annotation, split=';'); names(expect.splitted) <- rownames(expect);
-		expect$Reannot <- sapply(expect.splitted, modif.annot, def.prior=def.prior, extra.prior=extra.annot, leftSta=leftSta, rightSta=rightSta, leftStop=leftStop, rightStop=rightStop, leftTTS=leftTTS, rightTSS=rightTSS)
+		expect$Reannot <- sapply(expect.splitted, modif.annot, def.prior=def.prior, extra.prior=extra.annot, leftSta=leftSta, rightSta=rightSta, leftStop=leftStop, rightStop=rightStop, leftTTS=leftTTS, rightTSS=rightTSS, TTSout=draw.TTSout)
 	}
 	
 	###-------------

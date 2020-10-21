@@ -10,10 +10,8 @@
 ##    Default parameters
 # ========================
 
-conf=${COCKTAIL}/AnnotationAnalysis/Diff1vs1_config.sh
+conf=${THESE_TOOLS}/AnnotationAnalysis/Diff1vs1_config.sh
 pathTsv=""
-pathBam=""
-d="Both"
 
 ### ================
 ##    ARGUMENTS
@@ -28,10 +26,8 @@ HELP="
 \n-pF=|--peakFolder= folder containing peaks in tsv [if not provided absolute path should provided in -p1 and -p0 arguments
 \n-p1=|--peaks1= name of peak 1(condition) in Tsv folder
 \n-p0=|--peaks0= name of peak 0(control) in Tsv folder
-\n-n=|--names=  comma separated names of IP1, IP0, INPUT1, INPUT0 in this order. If bL1_, bL0_, bI1_, bI0_ tags are not present they will be added (this step requires -n to not contain ° symbol) [default=-L1, -L0, -I1, -I0 filenames]
 \n-o=|--out= ouput directory
 \n-a=|--annotation= annotation file in refFlat format (absolute path)
-\n-d=|--direction= direction of the differential analysis. It can be \'Both\', \'Hypo\' or \'Hyper\'. [default=Both]
 \n-h=|--help= this help
 "
 
@@ -57,10 +53,6 @@ case $i in
     ;;
     -p0=*|--peaks0=*)
     peaksF="${i#*=}"
-    shift # past argument=value
-    ;;
-    -n=*|--names=*)
-    sampNames="${i#*=}"
     shift # past argument=value
     ;;
     -o=*|--out=*)
@@ -173,16 +165,6 @@ else
 	fi
 fi
 
-##-n=*|--names=*)
-if [ ! -z ${sampNames} ]
-then
-	if [ ! ${sampNames} == *bL1_* ]
-	then
-		echo "Adding tags to names"
-		sampNames=$( echo "bL1_"${sampNames} | sed 's/,/°bL0_/'  | sed 's/,/°bI1_/' | sed 's/,/°bI0_/' | sed 's/°/,/g')
-	fi
-fi
-
 ##-o=*|--out=*)
 if [ -z ${pathOut} ]
 then
@@ -236,17 +218,16 @@ then
 	## Prepare
 	mkdir ${pathOut}ComparPeaks/
 	pathComp=${pathOut}ComparPeaks/
-	mkdir ${pathOut}Diff/
-	pathDiff=${pathOut}Diff/
+	f=$( echo ${peaksf} | awk '{split($0,a,"'IP-seq-t'|'.bam-c'|'_peaks'")} END{print a[2]}' )
+	F=$( echo ${peaksF} | awk '{split($0,a,"'IP-seq-t'|'.bam-c'|'_peaks'")} END{print a[2]}' )
 	peaksf=${pathTsv}${peaksf}
 	peaksF=${pathTsv}${peaksF}
 	#Normally only the first sed is usefull the other are for compatibility
-	n=$( basename ${f} | sed -re 's/\_[a-zA-Z0-9]*\-(map|less)//' | sed 's/\/accepted_hits//' | sed 's/\.bam//' | sed 's/lessDuplicates//' | sed 's/sort//' | sed 's/_//g')
-	N=$( basename ${F} | sed -re 's/\_[a-zA-Z0-9]*\-(map|less)//' | sed 's/\/accepted_hits//' | sed 's/\.bam//' | sed 's/lessDuplicates//' | sed 's/sort//' | sed 's/_//g')
+	n=$( basename ${f} | sed 's/\.bam//' | sed 's/sort//' | sed 's/_//g')
+	N=$( basename ${F} | sed 's/\.bam//' | sed 's/sort//' | sed 's/_//g')
 	outname=${n}_VS_${N}
 	outComp=${pathComp}${outname}
 	outDiff=${pathDiff}${outname}.csv
-	tmpGb=${pathOut}${outname}_$( basename ${refFlat} ).gb
 
 	## Run "compare_bed.py" to realise spatial comparison and peak union
 	if [[ ${FLAG_COMPARE_BED} -eq 1 ]]

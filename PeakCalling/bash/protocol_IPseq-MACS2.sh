@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # dependencies
-echo "source ${COCKTAIL}/dependencies.sh"
-source ${COCKTAIL}/dependencies.sh
+echo "source "${THESE_TOOLS}"/dependencies.sh"
+source ${THESE_TOOLS}/dependencies.sh
 
 # ==================
 # ARGUMENTS
@@ -13,9 +13,9 @@ HELP="
 \n
 \n\tIP-seq analysis with MACS2
 \n
-\nUSAGE: 
+\nUSAGE:
 \n
-\n\t${0} -I=<bam of IP> -C=<bam of INPUT> -o=<path to directory for output> -p=<prefexie of output [default=IP-seq]> -q=<MACS2 q-value [default=0.05]> -a=<ref.flat annotation> -ts=<transcriptome size [default=extract from -a keeping introns]> -s=<half size of summits-sentered peaks [default=100]> -kd[if provided MACS2 keep the duplicates] -sh=<MACS2 shift [if provided MACS2 --nomodel option is used]>
+\n\t${0} -I=<bam of IP> -C=<bam of INPUT> -o=<path to directory for output> -p=<prefexie of output [default=IP-seq]> -q=<MACS2 q-value [default=0.05]> -a=<ref.flat annotation> -ts=<transcriptome size [default=extract from -a keeping introns]> -s=<half size of summits-sentered peaks [default=100]> -kd[if provided MACS2 keep the duplicates] -es=<MACS2 extsize [if provided MACS2 --nomodel option is used]>
 \n
 \nTEST:
 \n\t[romy@Pipeline ~]$ bash PeakCalling/bash/protocol_IPseq-MACS2.sh -I=<IP sorted bam file> -C=<INPUT sorted bam file> -o=<output directory> -a=<annotation refFlat format>
@@ -39,8 +39,8 @@ MACS2TSVhalfsize=100
 for i in "$@"
 do
 case $i in
-    -h*|--help*)                 
-    echo -e ${HELP};                                           
+    -h*|--help*)
+    echo -e ${HELP};
     exit 0
     ;;
     -I=*|--IP=*)
@@ -51,35 +51,35 @@ case $i in
     f_control="${i#*=}"
     shift # past argument=value
     ;;
-    -o=*|--out=*)  
-    out_dir="${i#*=}"                                          
-    shift # past argument=value                                
+    -o=*|--out=*)
+    out_dir="${i#*=}"
+    shift # past argument=value
     ;;
     -q=*|--MACS2qvalue=*)
     MACS2q="${i#*=}"
     shift # past argument=value
     ;;
-    -p=*|--prefix=*)  
-    prefix="${i#*=}"                                          
-    shift # past argument=value                                
+    -p=*|--prefix=*)
+    prefix="${i#*=}"
+    shift # past argument=value
     ;;
-    -a=*|--annotation=*)  
-    fannot="${i#*=}"                                          
-    shift # past argument=value                                
-    ;; 
-    -ts=*|--TranscriptomeSize=*)  
-    size_transcriptom="${i#*=}"                                          
-    shift # past argument=value                                
-    ;; 
-    -s=*|--halfSize=*)  
-    MACS2TSVhalfsize="${i#*=}"                                          
-    shift # past argument=value                                
-    ;; 
-    -kd*|--MACS2keepDuplicates*)  
-    MACS2kd=" --keep-dup all"                                          
-    shift # past argument=value                                
-    ;; 
-    -es*|--extsize=*)  
+    -a=*|--annotation=*)
+    fannot="${i#*=}"
+    shift # past argument=value
+    ;;
+    -ts=*|--TranscriptomeSize=*)
+    size_transcriptom="${i#*=}"
+    shift # past argument=value
+    ;;
+    -s=*|--halfSize=*)
+    MACS2TSVhalfsize="${i#*=}"
+    shift # past argument=value
+    ;;
+    -kd*|--MACS2keepDuplicates*)
+    MACS2kd=" --keep-dup all"
+    shift # past argument=value
+    ;;
+    -es*|--extsize=*)
     MACS2sh="${i#*=}"
     if [[ ${MACS2sh} =~ ^[0-9]+$ ]]
     then
@@ -88,14 +88,14 @@ case $i in
         echo "[ERROR] MACS2 extsize should be numerical"
         exit 1
     fi
-    shift # past argument=value                                
-    ;; 
+    shift # past argument=value
+    ;;
     *)
             # unknown option
     ;;
 esac
 done
- 
+
 echo "F_CONDITION       = ${f_condition}"
 echo "F_CONTROL         = ${f_control}"
 echo "PREFIX            = ${prefix}"
@@ -170,10 +170,10 @@ then
 		exit 1
 	fi
 else
-	echo "[INFO] ${out_macs} was already present and has not been recomputed"	
+	echo "[INFO] ${out_macs} was already present and has not been recomputed"
 fi
 # get stats
-nb_peaks=$( awk '{print $1":"$2"-"$3}' $out_macs | sort | uniq |  wc -l ); 
+nb_peaks=$( awk '{print $1":"$2"-"$3}' $out_macs | sort | uniq |  wc -l );
 nb_summits=$( wc -l $out_macs | awk '{print $1"\t"$2}' ); echo -e "${d1}\t${d2}\t${nb_peaks}\t${nb_summits}"
 echo "[LOG] ... nb_peaks: ${nb_peaks}"
 echo "[LOG] ... nb_summits: ${nb_summits}"
