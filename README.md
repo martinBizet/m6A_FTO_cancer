@@ -7,16 +7,16 @@ The scripts run without any installation as long as the required dependencies an
 -------------------
 **0) prepare input files and set-up the tool**
 
-- Get bam files and bedgraphs for IP and INPUT using classifical preprocessing tools (see Jeschke at al, 2020). Examples are in "Data/RNAi/".
-- Add the path to your local copy of this git folder in the bash variable "THESE_TOOLS" (Add the following line in your.bashrc for a permanent usage or run on your terminal before any usage of the m6A-seq analyses tools) 
+0.1) Get bam files and bedgraphs for IP and INPUT using classifical preprocessing tools (see Jeschke at al, 2020). Examples are in "Data/RNAi/".
+0.2) Add the path to your local copy of this git folder in the bash variable "THESE_TOOLS" (Add the following line in your.bashrc for a permanent usage or run on your terminal before any usage of the m6A-seq analyses tools) 
 ```
 export THESE_TOOLS=<path to your local git folder>
 ```
-- Set up "dependencies.sh": Update with the appropriate paths
+0.3) Set up "dependencies.sh": Update with the appropriate paths
 
 **1) generate peaks and expected-peaks**
 
-- Run "protocol_IPseq-MACS2.sh"
+1.1) Run "protocol_IPseq-MACS2.sh"
 
 Description:
 bash tool to generate and annotate peak lists and expected-peaks lists using MACS2.
@@ -46,7 +46,7 @@ Dependencies:
 
 **2) Differential peaks analysis**
 
-- Run "protocol_IPseq-Diff1-vs-1.sh"
+2.1) Run "protocol_IPseq-Diff1-vs-1.sh"
 
 Description:
 Compare Case and Control peak lists to prepare for differential. "ComparPeaks" cotaining merge peak list from Case and Control on which Differential analysis will be done. Depending on the FLAG_ANNOT_UNION parameter in the configuration file annotation of this file merged list will be done (=1) or not (=0).
@@ -75,7 +75,7 @@ Dependencies:
 - the provided R code "Annot_Modifier.R" and its dependencies:
   - R (version 3.5.1)
 
-- Run "Diff_1vs1_RIPfromBdg.R"
+2.2) Run "Diff_1vs1_RIPfromBdg.R"
 
 Description:
 Compute the actual differential using overlap peaks list and bedgraphs. Note that three options are possible, we strongly recommend to use option 2 (used in Jeschke et al, 2020). 
@@ -95,7 +95,7 @@ Dependencies:
 
 2° Public Cohorts Analysis
 -----------------------------------------------------------------------
-**1) Boxplot_FTO_GDC.R**
+**2.1) Boxplot_FTO_GDC.R**
 
 Descripiton:
 Ready-to-use code to reproduce Jeschke et al, 2020 results on GDC
@@ -113,7 +113,7 @@ Dependencies:
 - R (version 3.5.1)
 
 
-**2) Boxplot_FTO_prostateGDS1439.R**
+**2.2) Boxplot_FTO_prostateGDS1439.R**
 
 Descripiton:
 Ready-to-use code to reproduce Jeschke et al results on GDS1439
