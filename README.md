@@ -22,7 +22,7 @@ Description:
 bash tool to generate and annotate peak lists and expected-peaks lists using MACS2.
 
 Expected output:
-ANNOTATION,  MACS2,  MACS2TSV and  RE-ANNOTATE folders containing respectively peak annotations, MACS2 results, re-sized peaks (tsv and bed formats) and improved annotation with illustrations (pdf format). The peaks lists are called "IPseq-t<IP bam filename>-c<INPUT bam filename>_peaks_foldchange_nocomments_summits100.bed" (while expected peaks lists are called "IPseq-e<INPUT bam filename>_peaks_foldchange_nocomments_summits100.bed" [see Material and Methods of Jeschke et al, 2020 for more details])
+ANNOTATION,  MACS2,  MACS2TSV and  RE-ANNOTATE folders containing respectively peak annotations, MACS2 results, re-sized peaks (tsv and bed formats) and improved annotation with illustrations (pdf format). The peaks lists are called "IPseq-t\<IP bam filename\>-c\<INPUT bam filename\>_peaks_foldchange_nocomments_summits100.bed" (while expected peaks lists are called "IPseq-e\<INPUT bam filename\>_peaks_foldchange_nocomments_summits100.bed" [see Material and Methods of Jeschke et al, 2020 for more details])
 
 Typical usage (for a description of all the parameters please use -h):
 ```
