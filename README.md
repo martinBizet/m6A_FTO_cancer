@@ -7,51 +7,64 @@ The scripts run without any installation as long as the required dependencies an
 -------------------
 **0) prepare input files and set-up the tool**
 
-- get bam files and bedgraph for IP and INPUT using classifical preprocessing tools (see Jeschke at al, 2020)
-- set up "dependencies.sh": Update with the appropriate paths and source it on a bash terminal
+- get bam files and bedgraph for IP and INPUT using classifical preprocessing tools (see Jeschke at al, 2020). Examples are in "Data/RNAi/".
+- Add the path to you local copy of this git folder in the bash variable "THESE_TOOLS" (Add the following line in your.bashrc for a permanent usage or run on your terminal before any usage of the m6A-seq analyses tools) 
+```
+export THESE_TOOLS=<path to your local git folder>
+```
+- set up "dependencies.sh": Update with the appropriate paths
 
 **1) generate peaks and expected-peaks**
 
 - run "protocol_IPseq-MACS2.sh"
 
-bash tool to generate and annotate peak lists and expected-peaks list.
+bash tool to generate and annotate peak lists and expected-peaks lists using MACS2.
 
 expected output:
-ANNOTATION,  MACS2,  MACS2TSV and  RE-ANNOTATE folders containing respectively peak annotations, MACS2 results, re-sized peaks (tsv and bed formats) and improved annotation with illustrations (pdf format).
+ANNOTATION,  MACS2,  MACS2TSV and  RE-ANNOTATE folders containing respectively peak annotations, MACS2 results, re-sized peaks (tsv and bed formats) and improved annotation with illustrations (pdf format). The peaks lists are called "IPseq-t<IP bam filename>-c<INPUT bam filename>_peaks_foldchange_nocomments_summits100.bed" (while expected peaks lists are called "IPseq-e<INPUT bam filename>_peaks_foldchange_nocomments_summits100.bed" [see Material and Methods of Jeschke et al, 2020 for more details])
 
-usage:
+typical usage (for a description of all the parameters please use -h):
 ```
-bash PeakCalling/bash/protocol_IPseq-MACS2.sh -I=<IP sorted bam file> -C=<INPUT sorted bam file> -o=<output directory> -a=<annotation refFlat format>
+./PeakCalling/bash/protocol_IPseq-MACS2.sh -I=<IP sorted bam> -C=<INPUT sorted bam> -o=<Output directory> -a=<annotation RefFlat file>
 ```
+Example (note the -es parameter is used here to set-up the extsize MACS2 parameter because of the small size to the example, with normal size bam, extsize is determined automatically by MACS2 [see MACS2 documentation for more information]):
+
+```
+./PeakCalling/bash/protocol_IPseq-MACS2.sh -I=${THESE_TOOLS}/Data/RNAi/RNAiFTO_m6A_chr2_50M_sort.bam -C=${THESE_TOOLS}/Data/RNAi/RNAiFTO_INP_chr2_50M_sort.bam -o=${THESE_TOOLS}/Data/RNAi -a=${THESE_TOOLS}/Data/Annotations/hg19_RefSeq_chr2.refFlat -es=230
+./PeakCalling/bash/protocol_IPseq-MACS2.sh -I=${THESE_TOOLS}/Data/RNAi/RNAiCtrl_m6A_chr2_50M_sort.bam -C=${THESE_TOOLS}/Data/RNAi/RNAiCtrl_INP_chr2_50M_sort.bam -o=${THESE_TOOLS}/Data/RNAi -a=${THESE_TOOLS}/Data/Annotations/hg19_RefSeq_chr2.refFlat -es=230
+
+```
+
+
 **2) Differential peaks analysis**
 
 - run "protocol_IPseq-Diff1-vs-1.sh"
-Compare Case and Control peak list to prepare for differential. See help
-usage:
+Compare Case and Control peak lists to prepare for differential. "ComparPeaks" cotaining merge peak list from Case and Control on which Differential analysis will be done. Depending on the FLAG_ANNOT_UNION parameter in the configuration file annotation of this file merged list will be done (=1) or not (=0).
+
+expected output:
+"merged.tsv" file, a bed file merging case and control peak list (and eventually "Reannotation.txt" file if FLAG_ANNOT_UNION=1)
+
+typical usage (for a description of all the parameters please use -h):
 ```
-bash AnnotationAnalysis/bash/protocol_IPseq-Diff1-vs-1.sh -h
+./AnnotationAnalysis/bash/protocol_IPseq_Diff1vs1.sh -c=<Configuration file> -pF=<peaks folder> -p1=<peak in Case condition> -p0=<peak in Control condition> -o=<Output directory> -a=<annotation RefFlat file>
+```
+Example (Note -pF -p1 -p0 are generated at step 1 )
+```
+./AnnotationAnalysis/bash/protocol_IPseq_Diff1vs1.sh -c=${THESE_TOOLS}/AnnotationAnalysis/Diff1vs1_config.sh -pF=${THESE_TOOLS}/Data/RNAi/MACS2TSV/ -p1=IP-seq-tRNAiFTO_m6A_chr2_50M_sort.bam-cRNAiFTO_INP_chr2_50M_sort.bam_peaks_foldchange_nocomments_summits100.bed -p0=IP-seq-tRNAiCtrl_m6A_chr2_50M_sort.bam-cRNAiCtrl_INP_chr2_50M_sort.bam_peaks_foldchange_nocomments_summits100.bed -o=Data/RNAi -a=Data/Annotations/hg19_RefSeq_chr2.refFlat
 ```
 
 - run "Diff_1vs1_RIPfromBdg.R"
-Compute differential using overlap peak list and bedgraphs. See help
+Compute the actual differential using overlap peaks list and bedgraphs. Note that three options are possible, we strongly recommend to use option 2 (used in Jeschke et al, 2020). 
 usage:
 ```
-bash AnnotationAnalysis/R/Diff_1vs1_RIPfromBdg.R -h
+./AnnotationAnalysis/bash/protocol_IPseq_Diff1vs1.sh -c=${THESE_TOOLS}/AnnotationAnalysis/Diff1vs1_config.sh -pF=${THESE_TOOLS}/Data/RNAi/MACS2TSV/ -p1=IP-seq-tRNAiFTO_m6A_chr2_50M_sort.bam-cRNAiFTO_INP_chr2_50M_sort.bam_peaks_foldchange_nocomments_summits100.bed -p0=IP-seq-tRNAiCtrl_m6A_chr2_50M_sort.bam-cRNAiCtrl_INP_chr2_50M_sort.bam_peaks_foldchange_nocomments_summits100.bed -o=Data/RNAi -a=Data/Annotations/hg19_RefSeq_chr2.refFlat
+
 ```
-- run "Diff_1vs1_RIPfromBdg.R"
-Visualise results. See help
-usage:
+Example:
 ```
-bash AnnotationAnalysis/R/Diff_1vs1_RIPort.R -h
+./AnnotationAnalysis/R/Diff_1vs1_RIPfromBdg.R -i=${THESE_TOOLS}/Data/RNAi/ComparPeaks/RNAiFTOm6Achr250M_VS_RNAiCtrlm6Achr250M_mergebed.tsv -o=${THESE_TOOLS}/Data/RNAi/RNAi -a=${THESE_TOOLS}/Data/RNAi/ComparPeaks/RNAiFTOm6Achr250M_VS_RNAiCtrlm6Achr250M_Reannotation.txt -bF=Data/RNAi/ -bL1=RNAiFTO_m6A_chr2_50M.bedgraph -bL0=RNAiCtrl_m6A_chr2_50M.bedgraph -bI1=RNAiFTO_INP_chr2_50M.bedgraph -bI0=RNAiCtrl_INP_chr2_50M.bedgraph -opt=2 -gS=2897310462 -gtf=Data/Annotations/hg19_RefSeq_chr2.gtf
 ```
 
-**3) Motif analysis**
-- run "Motif_AMeme.sh"
-Identify motif in peak list or evaluate the significance of a known motif (using Meme-Chip or AME respectively). See help
-usage:
-```
-bash AnnotationAnalysis/bash/Motif_AMeme.sh -h
-```
 
 2° Public Cohorts Analysis
 -----------------------------------------------------------------------
